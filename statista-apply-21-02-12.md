@@ -703,7 +703,7 @@ conf_mat_list
 [[1]]
     predicted
 true  0  1
-   0 17  2
+   0 18  1
    1  2 11
 
 [[2]]
@@ -715,7 +715,7 @@ true  0  1
 [[3]]
     predicted
 true  0  1
-   0 17  2
+   0 16  3
    1  2 11
 
 [[4]]
@@ -743,5 +743,5 @@ Thank you very much for your attention!
 
 contact: martin.junge@lsp.de
 
-This presentation will be available at https://github.com/mjunge-lsp/statista-apply
+This presentation will be available at https://github.com/mjunge-lsp/statista-apply/blob/master/statista-apply-21-02-12.md
 
