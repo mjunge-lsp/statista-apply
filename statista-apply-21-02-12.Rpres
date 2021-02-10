@@ -1,0 +1,303 @@
+The apply function family in R
+========================================================
+author: Martin Junge
+date: 21-02-12
+width: 1920
+height: 1080
+
+
+Overview
+========================================================
+
+- functional programming in R
+- the apply family
+  - apply
+  - lapply
+  - sapply
+  - vapply
+  - mapply
+- Some exercises
+
+Sources
+========================================================
+
+![advanced_r](advanced_R.png)
+
+Wickham, H. (2015). Advanced R. Boca Raton, FL: CRC Press.
+
+Functional programming in R
+========================================================
+
+- R as a *functional* and object-oriented programming language
+
+"Everything that exists is an object.
+Everything that happens is a function call."
+— John Chambers
+
+```{r plus}
+`+`
+1 + 2
+`+`(1, 2)
+```
+
+apply /1
+========================================================
+
+- apply functions make use of the nature of R as a functional language
+- most basic variant: `apply`
+
+```{r apply_1}
+head(mtcars)
+apply(mtcars, MARGIN = 2, FUN = mean)
+```
+
+apply /2
+========================================================
+
+```{r apply_2}
+apply(mtcars, MARGIN = 1, FUN = mean)
+```
+
+- Cave: not meaningful!
+
+apply /3
+========================================================
+
+```{r apply_3}
+head(iris)
+iris$max_length <- apply(iris[c("Sepal.Length", "Petal.Length")], 1, max)
+head(iris)
+```
+
+apply /4
+========================================================
+
+```{r apply_4}
+check_four <- function(x)
+{
+  check <- any(x > 4)
+  return(check)
+}
+iris$check <- apply(iris[1:4], 1, check_four)
+head(iris)
+```
+
+apply /5
+========================================================
+
+```{r apply_5}
+iris$check <- apply(iris[1:4], 1, function(x) any(x > 4))
+head(iris)
+```
+
+tapply /1
+========================================================
+
+- applies a function on a vector group-wise
+
+```{r tapply_1}
+Hmisc::describe(mtcars$cyl)
+tapply(mtcars$hp, mtcars$cyl, mean)
+tapply(mtcars$hp, mtcars$cyl, max)
+```
+
+tapply /2
+========================================================
+
+```{r tapply_2}
+means_cyl_am <- tapply(mtcars$hp, list(mtcars$cyl, mtcars$am), mean)
+barplot(means_cyl_am, beside = TRUE)
+```
+
+tapply /3
+========================================================
+
+```{r tapply_3}
+check_mpg <- function(x)
+{
+  check <- any(x > 20)
+  return(check)
+}
+
+tapply(mtcars$mpg, list(cyl = mtcars$cyl, am = mtcars$am), check_mpg)
+tapply(mtcars$mpg, list(cyl = mtcars$cyl, am = mtcars$am), function(x) any(x > 20))
+```
+
+lapply
+========================================================
+
+- Input is a list, output is a list (`lapply`) or vector (`sapply`)
+
+```{r lapply_1}
+mtcars_list <- list(gear = mtcars$gear[1:4], am = mtcars$am[1:3])
+mtcars_list
+lapply(mtcars_list, mean)
+```
+
+sapply
+========================================================
+
+```{r lapply_2}
+mtcars_list <- list(gear = mtcars$gear[1:4], am = mtcars$am[1:3])
+mtcars_list
+sapply(mtcars_list, mean)
+sapply(mtcars_list, mean, simplify = FALSE)
+```
+
+vapply
+========================================================
+
+```{r lapply_3}
+mtcars_list <- list(gear = mtcars$gear[1:4], am = mtcars$am[1:3])
+mtcars_list
+vapply(mtcars_list, mean, numeric(1))
+# vapply(mtcars_list, mean, integer(1)) does produce error
+```
+
+lapply and data frames /1
+========================================================
+
+Since data.frames are essentially lists, `lapply` is very useful in the functional programming with data.frames
+
+```{r lapply_4}
+str(mtcars)
+```
+
+lapply and data frames /2
+========================================================
+
+```{r lapply_5}
+mtcars[c("cyl", "am", "gear")] <- lapply(mtcars[c("cyl", "am", "gear")], as.factor)
+str(mtcars)
+```
+
+lapply and data frames /3
+========================================================
+
+```{r lapply_6}
+is_numeric <- sapply(mtcars, is.numeric)
+is_numeric
+has_outliers <- sapply(mtcars[is_numeric], function(x) length(boxplot(x, plot = FALSE)$out) > 0)
+has_outliers
+```
+
+lapply and data frames /4
+========================================================
+
+```{r lapply_7}
+mtcars[is_numeric][has_outliers] <- lapply(mtcars[is_numeric][has_outliers], log)
+head(mtcars)
+```
+
+lapply and more complex functions /1
+========================================================
+
+```{r lapply_8}
+library(gapminder)
+head(gapminder)
+```
+
+lapply and more complex functions /2
+========================================================
+
+```{r lapply_9}
+cont_split <- split(gapminder, gapminder$continent)
+str(cont_split)
+```
+
+lapply and more complex functions /3
+========================================================
+
+Fitting a linear regression model with *population* and *GDP per capita* as predictors and *Life Expectancy* as outcome
+
+```{r lapply_10}
+fit_lin_reg <- function(cont)
+{
+  mod_lr <- lm(lifeExp ~ pop + gdpPercap, data = cont)
+  predicted <- predict(mod_lr, cont)
+  r2 <- cor(cont$lifeExp, predicted)^2
+  aic <- AIC(mod_lr)
+  bic <- BIC(mod_lr)
+  n <- dim(cont)[1]
+
+  return(list(R_squared = r2, AIC = aic, BIC = bic, N = n))
+}
+```
+
+lapply and more complex functions /4
+========================================================
+
+```{r lapply_11}
+lin_reg_res_list <- lapply(cont_split, fit_lin_reg)
+lin_reg_res_list[[1]]
+```
+
+lapply and more complex functions /5
+========================================================
+
+```{r lapply_12}
+lin_reg_res_tab <- do.call(rbind, lin_reg_res_list)
+lin_reg_res_tab
+```
+
+mapply /1
+========================================================
+
+The multivariate member of the apply function family
+
+```{r mapply_1}
+a <- c(seq(1, 10, 2))
+a
+b <- c(seq(20, 1, -4))
+b
+
+mapply(`+`, x = a, y = b)
+a + b
+```
+
+mapply /2
+========================================================
+
+```{r mapply_2}
+library(ranger)
+fit_grid <- expand.grid(n_trees = c(100, 500), rep = c(TRUE, FALSE))
+fit_grid
+mod_rf <- mapply(ranger, num.trees = fit_grid$n_trees, replace = fit_grid$rep,
+                 MoreArgs = list(formula = as.factor(am) ~ ., data = mtcars), SIMPLIFY = FALSE)
+```
+
+mapply /3
+========================================================
+
+```{r mapply_3}
+str(mod_rf, max.level = 1)
+```
+
+mapply /4
+========================================================
+
+```{r mapply_4}
+conf_mat_list <- lapply(mod_rf, function(x) x$confusion.matrix)
+conf_mat_list
+```
+
+Some exercises
+========================================================
+
+- get the number of missing values by column for the `airquality` dataset
+- Do a Fisher z transformation for all columns of `mtcars` with a variance over 100
+- apply a logistic regression on `vm` of `mtcars` with predictors `mpg` and `hp` for cars with automatic and non-automatic transmission
+  - extract `AIC` and `BIC` from each model and plot it in a grouped barplot
+
+Beyond the apply family
+========================================================
+
+- If you use `tidyverse`, have a look at the `map` and `nest` functions
+
+Thank you very much for your attention!
+========================================================
+
+contact: martin.junge@lsp.de
+
+This presentation will be available at https://github.com/mjunge-lsp/statista-apply
+
