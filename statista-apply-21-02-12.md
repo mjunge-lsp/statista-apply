@@ -157,7 +157,7 @@ apply(mtcars, MARGIN = 1, FUN = mean)
            60.97182            34.50818            63.15545            26.26273 
 ```
 
-- Cave: not meaningful!
+- Cave: not a meaningful statistic!
 
 apply /3
 ========================================================
@@ -754,7 +754,7 @@ true  0  1
 [[3]]
     predicted
 true  0  1
-   0 17  2
+   0 18  1
    1  2 11
 
 [[4]]

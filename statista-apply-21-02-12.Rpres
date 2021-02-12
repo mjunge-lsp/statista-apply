@@ -77,7 +77,7 @@ apply /2
 apply(mtcars, MARGIN = 1, FUN = mean)
 ```
 
-- Cave: not meaningful!
+- Cave: not a meaningful statistic!
 
 apply /3
 ========================================================
