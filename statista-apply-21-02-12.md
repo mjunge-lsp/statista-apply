@@ -715,7 +715,7 @@ true  0  1
 [[3]]
     predicted
 true  0  1
-   0 16  3
+   0 17  2
    1  2 11
 
 [[4]]
@@ -733,7 +733,7 @@ Some exercises
 - apply a logistic regression on `vm` of `mtcars` with predictors `mpg` and `hp` for cars with automatic and non-automatic transmission
   - extract `AIC` and `BIC` from each model and plot it in a grouped barplot
 
-Beyond the apply family
+Beyond base R
 ========================================================
 
 - If you use `tidyverse`, have a look at the `map` and `nest` functions
