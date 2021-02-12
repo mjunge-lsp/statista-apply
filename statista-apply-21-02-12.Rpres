@@ -40,10 +40,29 @@ Everything that happens is a function call."
 `+`(1, 2)
 ```
 
-apply /1
+apply instead of for-loops
 ========================================================
 
 - apply functions make use of the nature of R as a functional language
+- replace for-loops
+
+```{r apply_for}
+head(mtcars)
+
+colmeans <- NULL
+for (i in 1:ncol(mtcars))
+{
+  m <- mean(mtcars[, i])
+  colmeans <- c(colmeans, m)
+}
+names(colmeans) <- names(mtcars)
+colmeans
+```
+
+
+apply /1
+========================================================
+
 - most basic variant: `apply`
 
 ```{r apply_1}

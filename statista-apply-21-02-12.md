@@ -59,10 +59,49 @@ function (e1, e2)  .Primitive("+")
 [1] 3
 ```
 
-apply /1
+apply instead of for-loops
 ========================================================
 
 - apply functions make use of the nature of R as a functional language
+- replace for-loops
+
+
+```r
+head(mtcars)
+```
+
+```
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```r
+colmeans <- NULL
+for (i in 1:ncol(mtcars))
+{
+  m <- mean(mtcars[, i])
+  colmeans <- c(colmeans, m)
+}
+names(colmeans) <- names(mtcars)
+colmeans
+```
+
+```
+       mpg        cyl       disp         hp       drat         wt       qsec 
+ 20.090625   6.187500 230.721875 146.687500   3.596563   3.217250  17.848750 
+        vs         am       gear       carb 
+  0.437500   0.406250   3.687500   2.812500 
+```
+
+
+apply /1
+========================================================
+
 - most basic variant: `apply`
 
 
@@ -703,14 +742,14 @@ conf_mat_list
 [[1]]
     predicted
 true  0  1
-   0 18  1
+   0 17  2
    1  2 11
 
 [[2]]
     predicted
 true  0  1
    0 17  2
-   1  2 11
+   1  1 12
 
 [[3]]
     predicted
