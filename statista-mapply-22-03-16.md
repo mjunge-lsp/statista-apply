@@ -16,7 +16,7 @@ Overview
   - sapply
   - vapply
   - **mapply**
-- Some applications from a medical data project
+- Two code examples
 
 Functional programming in R
 ========================================================
@@ -50,6 +50,22 @@ function (e1, e2)  .Primitive("+")
 
 ```
 [1] 3
+```
+
+```r
+mtcars[2, 1]
+```
+
+```
+[1] 21
+```
+
+```r
+`[`(mtcars, 2, 1)
+```
+
+```
+[1] 21
 ```
 
 apply instead of for-loops
@@ -231,7 +247,7 @@ true  0  1
 [[3]]
     predicted
 true  0  1
-   0 17  2
+   0 18  1
    1  2 11
 
 [[4]]

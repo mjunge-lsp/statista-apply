@@ -16,7 +16,7 @@ Overview
   - sapply
   - vapply
   - **mapply**
-- Some applications from a medical data project
+- Two code examples
 
 Functional programming in R
 ========================================================
@@ -31,6 +31,8 @@ Everything that happens is a function call."
 `+`
 1 + 2
 `+`(1, 2)
+mtcars[2, 1]
+`[`(mtcars, 2, 1)
 ```
 
 apply instead of for-loops

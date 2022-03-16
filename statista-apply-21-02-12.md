@@ -742,19 +742,19 @@ conf_mat_list
 [[1]]
     predicted
 true  0  1
-   0 17  2
+   0 18  1
    1  2 11
 
 [[2]]
     predicted
 true  0  1
    0 17  2
-   1  1 12
+   1  2 11
 
 [[3]]
     predicted
 true  0  1
-   0 18  1
+   0 17  2
    1  2 11
 
 [[4]]
